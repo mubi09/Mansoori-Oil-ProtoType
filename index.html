@@ -1,0 +1,2294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mansoori Oil - Hisab Kitab & Billing System (Powered by NexaBix)</title>
+<!-- Modern Inter / Plus Jakarta Sans Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    /* Zoho Inventory Clean Light Palette */
+    --bg-page: #f4f6fa;
+    --bg-white: #ffffff;
+    --bg-sidebar: #192133;
+    --bg-sidebar-hover: #222b40;
+    --sidebar-active-blue: #1b73e8;
+    
+    --border-light: #e5e9f2;
+    --border-subtle: #edf2f7;
+    --border-sidebar: rgba(255, 255, 255, 0.08);
+
+    --text-dark: #1e293b;
+    --text-heading: #0f172a;
+    --text-muted: #64748b;
+    --text-light-muted: #94a3b8;
+    --text-sidebar: #c2cde2;
+    
+    --primary-blue: #1b73e8;
+    --primary-blue-hover: #1557b0;
+    --accent-orange: #f97316;
+    --accent-emerald: #10b981;
+    --accent-amber: #f59e0b;
+    --accent-rose: #ef4444;
+    
+    --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.03);
+    --shadow-hover: 0 6px 16px rgba(0, 0, 0, 0.07);
+    --shadow-modal: 0 20px 45px rgba(15, 23, 42, 0.2);
+
+    --sidebar-width: 240px;
+    --topbar-height: 54px;
+  }
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background-color: var(--bg-page);
+    color: var(--text-dark);
+    min-height: 100vh;
+    display: flex;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ========================================================
+     LEFT SIDEBAR (ZOHO INVENTORY THEME & MENU)
+     ======================================================== */
+  aside.app-sidebar {
+    width: var(--sidebar-width);
+    background: var(--bg-sidebar);
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    z-index: 200;
+    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .sidebar-header {
+    height: var(--topbar-height);
+    padding: 0 18px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 1px solid var(--border-sidebar);
+  }
+
+  .sidebar-logo-icon {
+    width: 32px;
+    height: 32px;
+    background: #f59e0b;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 17px;
+    font-weight: 800;
+    flex-shrink: 0;
+  }
+
+  .sidebar-brand-title {
+    font-size: 15px;
+    font-weight: 800;
+    color: #ffffff;
+    letter-spacing: -0.3px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .sidebar-brand-title span {
+    color: #fbbf24;
+    font-weight: 700;
+    font-size: 13px;
+  }
+
+  /* Role Switcher Pill in Sidebar */
+  .sidebar-portal-toggle {
+    margin: 12px 14px 6px 14px;
+    background: #111726;
+    border: 1px solid var(--border-sidebar);
+    border-radius: 8px;
+    padding: 3px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3px;
+  }
+
+  .portal-pill-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-sidebar);
+    font-size: 11px;
+    font-weight: 700;
+    padding: 6px 4px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+  }
+
+  .portal-pill-btn.active-admin {
+    background: var(--primary-blue);
+    color: #ffffff;
+    box-shadow: 0 2px 6px rgba(27, 115, 232, 0.4);
+  }
+
+  .portal-pill-btn.active-customer {
+    background: var(--accent-emerald);
+    color: #ffffff;
+    box-shadow: 0 2px 6px rgba(16, 185, 129, 0.4);
+  }
+
+  /* Sidebar Navigation Menu */
+  .sidebar-menu-list {
+    list-style: none;
+    padding: 10px 10px;
+    flex-grow: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  .sidebar-item-btn {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 9px 12px;
+    color: var(--text-sidebar);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 500;
+    border-radius: 6px;
+    cursor: pointer;
+    border: none;
+    background: transparent;
+    transition: all 0.15s ease;
+  }
+
+  .sidebar-item-btn:hover {
+    background: var(--bg-sidebar-hover);
+    color: #ffffff;
+  }
+
+  .sidebar-item-btn.active {
+    background: var(--sidebar-active-blue);
+    color: #ffffff;
+    font-weight: 600;
+  }
+
+  .sidebar-item-btn .item-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .sidebar-item-btn .item-icon {
+    font-size: 16px;
+    opacity: 0.9;
+  }
+
+  .sidebar-badge-pos {
+    background: #10b981;
+    color: #fff;
+    font-size: 10px;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-weight: 800;
+  }
+
+  /* Sidebar Footer */
+  .sidebar-footer-wrap {
+    padding: 12px 14px;
+    border-top: 1px solid var(--border-sidebar);
+  }
+
+  .live-guided-pill {
+    background: rgba(27, 115, 232, 0.12);
+    border: 1px solid rgba(27, 115, 232, 0.35);
+    border-radius: 20px;
+    padding: 6px 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    color: #60a5fa;
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    margin-bottom: 10px;
+  }
+
+  .live-dot {
+    width: 7px;
+    height: 7px;
+    background: #38bdf8;
+    border-radius: 50%;
+    box-shadow: 0 0 8px #38bdf8;
+    animation: pulseGlow 1.8s infinite;
+  }
+
+  @keyframes pulseGlow {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(0.85); }
+  }
+
+  .sidebar-user-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 6px 4px;
+  }
+
+  .sidebar-user-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+  }
+
+  .sidebar-user-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #1b73e8;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .sidebar-user-name {
+    font-size: 12px;
+    font-weight: 600;
+    color: #ffffff;
+  }
+
+  .sidebar-user-role {
+    font-size: 10.5px;
+    color: #94a3b8;
+  }
+
+  .btn-collapse-sidebar {
+    background: none;
+    border: none;
+    color: #94a3b8;
+    cursor: pointer;
+    font-size: 14px;
+    padding: 4px;
+  }
+
+  /* ========================================================
+     MAIN APP VIEWPORT & WHITE TOPBAR
+     ======================================================== */
+  .app-viewport {
+    margin-left: var(--sidebar-width);
+    flex-grow: 1;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    width: calc(100% - var(--sidebar-width));
+  }
+
+  /* TOP NAVBAR */
+  header.top-navbar {
+    height: var(--topbar-height);
+    background: var(--bg-white);
+    border-bottom: 1px solid var(--border-light);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 24px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .top-left-group {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .btn-mobile-toggle {
+    display: none;
+    background: transparent;
+    border: 1px solid var(--border-light);
+    font-size: 18px;
+    padding: 4px 8px;
+    border-radius: 6px;
+    cursor: pointer;
+    color: var(--text-dark);
+  }
+
+  .btn-top-refresh {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    font-size: 15px;
+    cursor: pointer;
+    padding: 4px 6px;
+  }
+
+  .top-search-wrap {
+    position: relative;
+    width: 270px;
+  }
+
+  .top-search-icon {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #94a3b8;
+    font-size: 13px;
+  }
+
+  .top-search-input {
+    width: 100%;
+    background: #f1f5f9;
+    border: 1px solid transparent;
+    border-radius: 6px;
+    padding: 6px 12px 6px 30px;
+    font-size: 12px;
+    color: var(--text-dark);
+    outline: none;
+    transition: all 0.15s;
+  }
+  .top-search-input:focus {
+    background: #ffffff;
+    border-color: var(--primary-blue);
+    box-shadow: 0 0 0 3px rgba(27, 115, 232, 0.1);
+  }
+
+  .top-right-group {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .org-selector-pill {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12.5px;
+    color: var(--text-muted);
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 6px;
+    border: 1px solid var(--border-light);
+    background: #fafafa;
+  }
+  .org-selector-pill strong {
+    color: var(--text-heading);
+    font-weight: 700;
+  }
+
+  .btn-quick-plus {
+    width: 30px;
+    height: 30px;
+    background: var(--primary-blue);
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-size: 17px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: 0.15s;
+    text-decoration: none;
+  }
+  .btn-quick-plus:hover {
+    background: var(--primary-blue-hover);
+  }
+
+  .top-avatar-circle {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: #e2e8f0;
+    color: #475569;
+    font-size: 12px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+
+  /* GREETING & SUB-NAV TABS */
+  .sub-header-bar {
+    background: var(--bg-white);
+    border-bottom: 1px solid var(--border-light);
+    padding: 16px 28px 0 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .greeting-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .greeting-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .org-icon-badge {
+    width: 44px;
+    height: 44px;
+    border-radius: 8px;
+    border: 1px solid var(--border-light);
+    background: #fef3c7;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+  }
+
+  .greeting-text h1 {
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--text-heading);
+    line-height: 1.2;
+  }
+
+  .greeting-text p {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: 2px;
+  }
+
+  .greeting-right-helpline {
+    font-size: 11.5px;
+    color: var(--text-muted);
+    text-align: right;
+  }
+  .greeting-right-helpline strong {
+    color: var(--text-heading);
+    font-weight: 700;
+  }
+
+  /* Horizontal Sub-Tabs with Blue Indicator */
+  .sub-nav-tabs {
+    display: flex;
+    gap: 22px;
+    border-bottom: 1px solid transparent;
+    overflow-x: auto;
+  }
+
+  .sub-tab-btn {
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid transparent;
+    padding: 0 0 10px 0;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.15s;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+  .sub-tab-btn:hover {
+    color: var(--primary-blue);
+  }
+  .sub-tab-btn.active {
+    color: var(--primary-blue);
+    border-bottom-color: var(--primary-blue);
+    font-weight: 700;
+  }
+
+  /* MAIN CONTENT AREA */
+  main.main-content {
+    padding: 24px 28px;
+    flex-grow: 1;
+    max-width: 1560px;
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  /* TAB PANES */
+  .tab-view-pane {
+    display: none;
+  }
+  .tab-view-pane.active {
+    display: block;
+  }
+
+  /* Universal White Zoho Card */
+  .zoho-card {
+    background: var(--bg-white);
+    border: 1px solid var(--border-light);
+    border-radius: 8px;
+    padding: 18px 20px;
+    margin-bottom: 20px;
+    box-shadow: var(--shadow-card);
+  }
+
+  .zoho-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .zoho-card-title {
+    font-size: 14.5px;
+    font-weight: 700;
+    color: var(--text-heading);
+  }
+
+  /* 4 KPI Summary Metric Cards */
+  .kpi-metric-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    gap: 14px;
+    margin-bottom: 20px;
+  }
+
+  .kpi-tile {
+    background: var(--bg-white);
+    border: 1px solid var(--border-light);
+    border-radius: 8px;
+    padding: 16px;
+    box-shadow: var(--shadow-card);
+  }
+
+  .kpi-tile-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+  }
+
+  .kpi-tile-value {
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--text-heading);
+    margin: 6px 0 2px 0;
+  }
+
+  .kpi-tile-sub {
+    font-size: 11.5px;
+    color: var(--accent-emerald);
+    font-weight: 600;
+  }
+
+  /* 2-Column Dashboard */
+  .dashboard-grid-layout {
+    display: grid;
+    grid-template-columns: 2.2fr 1fr;
+    gap: 20px;
+    align-items: start;
+  }
+
+  /* Top Selling Carousel / Grid */
+  .top-selling-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+  }
+
+  .selling-item-card {
+    background: #ffffff;
+    border: 1px solid var(--border-light);
+    border-radius: 8px;
+    padding: 12px;
+    text-align: center;
+    transition: transform 0.2s, box-shadow 0.2s;
+    cursor: pointer;
+  }
+  .selling-item-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-hover);
+    border-color: #cbd5e1;
+  }
+
+  .item-thumb-box {
+    width: 100%;
+    height: 70px;
+    background: #fffbeb;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px;
+    font-size: 28px;
+  }
+
+  .item-card-name {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-dark);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 4px;
+  }
+
+  .item-card-qty {
+    font-size: 13.5px;
+    font-weight: 800;
+    color: var(--text-heading);
+    margin-bottom: 4px;
+  }
+
+  .item-card-growth {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--accent-emerald);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+  }
+
+  /* Pending Actions Panel (Zoho Style) */
+  .pending-actions-card {
+    background: var(--bg-white);
+    border: 1px solid var(--border-light);
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: var(--shadow-card);
+  }
+
+  .pending-header-tabs {
+    display: flex;
+    border-bottom: 1px solid var(--border-light);
+    background: #fafbfc;
+    padding: 4px 6px;
+    gap: 4px;
+  }
+
+  .pending-tab-toggle {
+    flex: 1;
+    border: none;
+    background: transparent;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-muted);
+    padding: 8px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.15s;
+  }
+  .pending-tab-toggle.active {
+    background: #ffffff;
+    color: var(--text-heading);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  }
+
+  .action-category-box {
+    padding: 16px 18px;
+    border-bottom: 1px solid var(--border-subtle);
+  }
+  .action-category-box:last-child {
+    border-bottom: none;
+  }
+
+  .category-header-title {
+    font-size: 11.5px;
+    font-weight: 800;
+    color: var(--accent-orange);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 12px;
+  }
+
+  .action-row-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 7px 0;
+    font-size: 12.5px;
+    color: #475569;
+    cursor: pointer;
+    transition: color 0.15s;
+  }
+  .action-row-item:hover {
+    color: var(--primary-blue);
+  }
+
+  .action-row-item .item-count {
+    font-weight: 700;
+    color: var(--text-heading);
+    font-size: 13px;
+  }
+
+  /* Data Table */
+  .table-wrap {
+    width: 100%;
+    overflow-x: auto;
+  }
+
+  table.zoho-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12.5px;
+  }
+
+  table.zoho-table th {
+    background: #f8fafc;
+    color: var(--text-muted);
+    font-weight: 600;
+    text-align: left;
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border-light);
+    text-transform: uppercase;
+    font-size: 11px;
+    letter-spacing: 0.3px;
+    white-space: nowrap;
+  }
+
+  table.zoho-table td {
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--border-subtle);
+    color: var(--text-dark);
+    white-space: nowrap;
+  }
+
+  table.zoho-table tr:hover td {
+    background-color: #fafbfc;
+  }
+
+  .badge-pill {
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 700;
+    display: inline-block;
+  }
+  .badge-paid { background: #dcfce7; color: #15803d; }
+  .badge-partial { background: #fef3c7; color: #b45309; }
+  .badge-alert { background: #fee2e2; color: #b91c1c; }
+
+  /* POS Billing */
+  .pos-container {
+    display: grid;
+    grid-template-columns: 1.6fr 1fr;
+    gap: 20px;
+  }
+
+  .pos-catalog-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+    gap: 12px;
+  }
+
+  .pos-item-card {
+    background: #ffffff;
+    border: 1px solid var(--border-light);
+    border-radius: 8px;
+    padding: 12px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .pos-item-card:hover {
+    border-color: var(--primary-blue);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-hover);
+  }
+
+  .pos-cart-box {
+    background: #ffffff;
+    border: 1px solid var(--border-light);
+    border-radius: 8px;
+    padding: 18px;
+  }
+
+  .cart-item-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px dashed var(--border-light);
+    font-size: 12px;
+  }
+
+  /* Modals */
+  .creds-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(15, 23, 42, 0.6);
+    backdrop-filter: blur(4px);
+    z-index: 999;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+  }
+
+  .creds-modal-card {
+    background: #ffffff;
+    border-radius: 12px;
+    max-width: 480px;
+    width: 100%;
+    padding: 24px;
+    box-shadow: var(--shadow-modal);
+  }
+
+  .cred-box {
+    background: #f8fafc;
+    border: 1.5px solid #cbd5e1;
+    border-radius: 8px;
+    padding: 14px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .cred-box:hover, .cred-box.selected {
+    border-color: var(--primary-blue);
+    background: #eff6ff;
+  }
+
+  /* Floating Support Button */
+  .support-floating-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: var(--primary-blue);
+    color: #ffffff;
+    border: none;
+    border-radius: 24px;
+    padding: 10px 18px;
+    font-size: 12px;
+    font-weight: 700;
+    box-shadow: 0 4px 15px rgba(27, 115, 232, 0.35);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    z-index: 99;
+    text-decoration: none;
+  }
+
+  /* Form Elements */
+  .form-control {
+    width: 100%;
+    padding: 9px 12px;
+    border: 1.5px solid #cbd5e1;
+    border-radius: 6px;
+    font-size: 13px;
+    outline: none;
+    transition: border 0.15s;
+  }
+  .form-control:focus {
+    border-color: var(--primary-blue);
+  }
+
+  /* Mobile Responsive */
+  @media (max-width: 992px) {
+    aside.app-sidebar {
+      transform: translateX(-100%);
+    }
+    aside.app-sidebar.open-mobile {
+      transform: translateX(0);
+      box-shadow: 0 0 30px rgba(0,0,0,0.5);
+    }
+    .app-viewport {
+      margin-left: 0;
+      width: 100%;
+    }
+    .btn-mobile-toggle {
+      display: block;
+    }
+    .dashboard-grid-layout {
+      grid-template-columns: 1fr;
+    }
+    .pos-container {
+      grid-template-columns: 1fr;
+    }
+    .top-selling-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 640px) {
+    .sub-header-bar {
+      padding: 12px 16px 0 16px;
+    }
+    main.main-content {
+      padding: 16px;
+    }
+    .greeting-right-helpline {
+      display: none;
+    }
+    .top-search-wrap {
+      display: none;
+    }
+  }
+</style>
+</head>
+<body>
+
+  <!-- MOBILE BACKDROP -->
+  <div id="mobileBackdrop" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 190;" onclick="toggleMobileSidebar()"></div>
+
+  <!-- ========================================================
+       LEFT SIDEBAR (ZOHO INVENTORY THEME & SIDE MENU BAR)
+       ======================================================== -->
+  <aside class="app-sidebar" id="appSidebar">
+    <!-- Brand Header -->
+    <div class="sidebar-header">
+      <div class="sidebar-logo-icon">🛢️</div>
+      <div style="flex-grow: 1; min-width: 0;">
+        <div class="sidebar-brand-title">
+          Mansoori <span>Oil</span>
+        </div>
+        <div style="font-size: 9.5px; color: #94a3b8; font-weight: 600;">
+          Hisab-Kitab & Billing
+        </div>
+      </div>
+    </div>
+
+    <!-- 2 LOGINS SWITCHER: ADMIN vs CUSTOMER -->
+    <div class="sidebar-portal-toggle">
+      <button type="button" id="pillAdmin" class="portal-pill-btn active-admin" onclick="switchPortalMode('admin')">
+        🛡️ Owner
+      </button>
+      <button type="button" id="pillCustomer" class="portal-pill-btn" onclick="switchPortalMode('customer')">
+        👤 Customer
+      </button>
+    </div>
+
+    <!-- SIDEBAR NAVIGATION MENU (EXACT 5 FOCUSED MODULES) -->
+    <ul class="sidebar-menu-list">
+      <!-- ADMIN SECTION -->
+      <div id="adminMenuList">
+        <li>
+          <button class="sidebar-item-btn active" id="menuDash" onclick="switchMainTab('dashboard')">
+            <div class="item-left">
+              <span class="item-icon">📊</span>
+              <span>Dashboard</span>
+            </div>
+          </button>
+        </li>
+        <li>
+          <button class="sidebar-item-btn" id="menuPOS" onclick="switchMainTab('pos')">
+            <div class="item-left">
+              <span class="item-icon">⚡</span>
+              <span>POS Billing Counter</span>
+            </div>
+            <span class="sidebar-badge-pos">F2</span>
+          </button>
+        </li>
+        <li>
+          <button class="sidebar-item-btn" id="menuCust" onclick="switchMainTab('customers')">
+            <div class="item-left">
+              <span class="item-icon">👥</span>
+              <span>Customer Management</span>
+            </div>
+          </button>
+        </li>
+        <li>
+          <button class="sidebar-item-btn" id="menuSupp" onclick="switchMainTab('suppliers')">
+            <div class="item-left">
+              <span class="item-icon">🏭</span>
+              <span>Supplier Management</span>
+            </div>
+          </button>
+        </li>
+        <li>
+          <button class="sidebar-item-btn" id="menuInv" onclick="switchMainTab('inventory')">
+            <div class="item-left">
+              <span class="item-icon">🛢️</span>
+              <span>Inventory Management</span>
+            </div>
+          </button>
+        </li>
+      </div>
+
+      <!-- CUSTOMER SECTION -->
+      <div id="customerMenuList" style="display: none;">
+        <li>
+          <button class="sidebar-item-btn active" onclick="switchMainTab('cust-passbook')">
+            <div class="item-left">
+              <span class="item-icon">📖</span>
+              <span>My Oil Khata Passbook</span>
+            </div>
+          </button>
+        </li>
+        <li>
+          <button class="sidebar-item-btn" onclick="switchMainTab('cust-invoices')">
+            <div class="item-left">
+              <span class="item-icon">📜</span>
+              <span>My Invoices</span>
+            </div>
+          </button>
+        </li>
+        <li>
+          <button class="sidebar-item-btn" onclick="switchMainTab('cust-upi')">
+            <div class="item-left">
+              <span class="item-icon">💳</span>
+              <span>Instant UPI Pay</span>
+            </div>
+          </button>
+        </li>
+      </div>
+    </ul>
+
+    <!-- Sidebar Footer -->
+    <div class="sidebar-footer-wrap">
+      <div class="live-guided-pill">
+        <div class="live-dot"></div>
+        <span id="sidebarStatusText">LIVE STORE ACTIVE</span>
+      </div>
+
+      <div class="sidebar-user-card">
+        <div class="sidebar-user-info" onclick="openLoginCredsModal()" title="View 2 Logins">
+          <div class="sidebar-user-avatar" id="sidebarAvatar">M</div>
+          <div>
+            <div class="sidebar-user-name" id="sidebarUserName">Mansoori Admin</div>
+            <div class="sidebar-user-role" id="sidebarUserRole">Store Owner</div>
+          </div>
+        </div>
+
+        <button class="btn-collapse-sidebar" onclick="openLoginCredsModal()" title="View Login Credentials">
+          🔑
+        </button>
+      </div>
+
+      <!-- Technical Partner Credit in Footer -->
+      <div style="text-align: center; padding: 6px 10px 4px 10px; font-size: 10px; color: #64748b; border-top: 1px solid rgba(255,255,255,0.06); margin-top: 4px;">
+        Designed & Powered by <strong style="color: #94a3b8;">NexaBix Technologies</strong>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ========================================================
+       MAIN APP VIEWPORT
+       ======================================================== -->
+  <div class="app-viewport">
+    
+    <!-- TOP NAVBAR (WHITE ZOHO BAR) -->
+    <header class="top-navbar">
+      <div class="top-left-group">
+        <button class="btn-mobile-toggle" onclick="toggleMobileSidebar()">☰</button>
+        <button class="btn-top-refresh" onclick="location.reload()" title="Refresh">⟳</button>
+        <div class="top-search-wrap">
+          <span class="top-search-icon">🔍</span>
+          <input type="text" class="top-search-input" placeholder="Search Customer Khata / Oil Tins ( / )">
+        </div>
+      </div>
+
+      <div class="top-right-group">
+        <div class="org-selector-pill" onclick="openLoginCredsModal()" style="cursor: pointer;">
+          <span>Organization:</span>
+          <strong style="color: #0f172a;">Mansoori Oil</strong>
+          <span style="font-size: 10px;">⌄</span>
+        </div>
+
+        <button class="btn-quick-plus" onclick="switchMainTab('pos')" title="Quick POS Bill [F2]">+</button>
+        
+        <a href="Mansoori_Oil_Prototype_and_Flow.pdf" target="_blank" class="top-icon-btn" title="Download PDF Blueprint" style="font-size: 12.5px; font-weight: 700; color: #1b73e8; display: flex; align-items: center; gap: 4px; text-decoration: none; background: #eff6ff; padding: 5px 10px; border-radius: 6px; border: 1px solid #bfdbfe;">
+          📄 PDF Blueprint
+        </a>
+
+        <div class="top-avatar-circle" onclick="openLoginCredsModal()" title="Profile / Switch Login">
+          MO
+        </div>
+      </div>
+    </header>
+
+    <!-- GREETING & SUB-NAV TABS (ZOHO HEADER) -->
+    <div class="sub-header-bar">
+      <div class="greeting-row">
+        <div class="greeting-left">
+          <div class="org-icon-badge">🛢️</div>
+          <div class="greeting-text">
+            <h1 id="greetingHeading">Hello, Mansoori Oil (Admin)</h1>
+            <p id="greetingSub">Mansoori Oil Depot &bull; GSTIN: 27AABCM8921P1Z5 &bull; Wholesale Market Yard, Mumbai</p>
+          </div>
+        </div>
+
+        <div class="greeting-right-helpline">
+          <div>Client Support Helpline: <strong>1800 123 4567</strong></div>
+          <div style="font-size: 10.5px; margin-top: 2px;">Powered by <strong>NexaBix Technologies</strong> (Toll Free)</div>
+        </div>
+      </div>
+
+      <!-- Horizontal Sub-Tabs with Blue Indicator (5 Essential Modules) -->
+      <div class="sub-nav-tabs">
+        <button class="sub-tab-btn active" id="subTabDash" onclick="switchMainTab('dashboard')">📊 Dashboard</button>
+        <button class="sub-tab-btn" id="subTabPOS" onclick="switchMainTab('pos')">⚡ Billing Counter [F2]</button>
+        <button class="sub-tab-btn" id="subTabCust" onclick="switchMainTab('customers')">👥 Customer Management (Khata)</button>
+        <button class="sub-tab-btn" id="subTabSupp" onclick="switchMainTab('suppliers')">🏭 Supplier Management (Payables)</button>
+        <button class="sub-tab-btn" id="subTabInv" onclick="switchMainTab('inventory')">🛢️ Inventory Management</button>
+      </div>
+    </div>
+
+    <!-- MAIN DASHBOARD CONTENT -->
+    <main class="main-content">
+
+      <!-- ========================================================
+           MODULE 1: DASHBOARD (ZOHO STYLE)
+           ======================================================== -->
+      <div id="pane-dashboard" class="tab-view-pane active">
+        
+        <!-- 4 KPI SUMMARY METRIC CARDS (HISAB KITAB FOCUSED) -->
+        <div class="kpi-metric-row">
+          <div class="kpi-tile">
+            <div class="kpi-tile-label">TODAY'S CASH & UPI INFLOW</div>
+            <div class="kpi-tile-value" style="color: #059669;">₹ 1,48,250</div>
+            <div class="kpi-tile-sub">↑ +18.4% vs yesterday</div>
+          </div>
+
+          <div class="kpi-tile">
+            <div class="kpi-tile-label">CUSTOMER UDHAR (RECEIVABLES)</div>
+            <div class="kpi-tile-value" style="color: var(--accent-amber);" id="dashTotalReceivables">₹ 3,42,800</div>
+            <div class="kpi-tile-sub" style="color: var(--accent-amber);">18 Active Khata Stores</div>
+          </div>
+
+          <div class="kpi-tile">
+            <div class="kpi-tile-label">SUPPLIER PAYABLES (MILL DUES)</div>
+            <div class="kpi-tile-value" style="color: var(--accent-rose);" id="dashTotalPayables">₹ 5,12,000</div>
+            <div class="kpi-tile-sub" style="color: var(--accent-rose);">2 Crude Tankers Due</div>
+          </div>
+
+          <div class="kpi-tile">
+            <div class="kpi-tile-label">TOTAL OIL STOCK IN WAREHOUSE</div>
+            <div class="kpi-tile-value" style="color: var(--primary-blue);" id="dashTotalUnits">1,465 Units</div>
+            <div class="kpi-tile-sub">Tins, Jars, Pouches, Cans</div>
+          </div>
+        </div>
+
+        <div class="dashboard-grid-layout">
+          
+          <!-- LEFT MAIN CONTENT (~70%) -->
+          <div>
+            <!-- TOP SELLING OIL PRODUCTS CAROUSEL -->
+            <div class="zoho-card">
+              <div class="zoho-card-header">
+                <div class="zoho-card-title">Top Selling Items (Mansoori Oil)</div>
+                <a class="filter-select-link">This Month ⌄</a>
+              </div>
+
+              <div class="top-selling-grid">
+                <div class="selling-item-card" onclick="quickBillProduct('Pure Mustard Oil 15L Tin', 1850)">
+                  <div class="item-thumb-box">🛢️</div>
+                  <div class="item-card-name">Mustard Oil 15L Tin</div>
+                  <div class="item-card-qty">450 Tins</div>
+                  <div class="item-card-growth">▲ 28%</div>
+                </div>
+
+                <div class="selling-item-card" onclick="quickBillProduct('Refined Sunflower 1L', 135)">
+                  <div class="item-thumb-box">🌻</div>
+                  <div class="item-card-name">Sunflower Oil 1L Pouch</div>
+                  <div class="item-card-qty">1,240 Pouches</div>
+                  <div class="item-card-growth">▲ 115%</div>
+                </div>
+
+                <div class="selling-item-card" onclick="quickBillProduct('Groundnut Oil 5L Jar', 780)">
+                  <div class="item-thumb-box">🥜</div>
+                  <div class="item-card-name">Groundnut Oil 5L Jar</div>
+                  <div class="item-card-qty">380 Jars</div>
+                  <div class="item-card-growth">▲ 42%</div>
+                </div>
+
+                <div class="selling-item-card" onclick="quickBillProduct('Soya Bean 15kg Can', 1720)">
+                  <div class="item-thumb-box">🌾</div>
+                  <div class="item-card-name">Soya Bean 15kg Can</div>
+                  <div class="item-card-qty">520 Cans</div>
+                  <div class="item-card-growth">▲ 65%</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- RECENT BILLING & HISAB TRANSACTIONS FEED -->
+            <div class="zoho-card">
+              <div class="zoho-card-header">
+                <div class="zoho-card-title">Recent Billing & Hisab Transactions</div>
+                <button class="btn-quick-plus" style="width: auto; height: auto; padding: 5px 12px; font-size: 11px;" onclick="switchMainTab('pos')">+ New Bill [F2]</button>
+              </div>
+
+              <div class="table-wrap">
+                <table class="zoho-table">
+                  <thead>
+                    <tr>
+                      <th>Bill No</th>
+                      <th>Customer / Supplier</th>
+                      <th>Type</th>
+                      <th>Items Dispatched</th>
+                      <th>Amount</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody id="recentTransactionsTableBody">
+                    <tr>
+                      <td style="font-family: monospace; font-weight: 700; color: #1b73e8;">#MO-2026-0842</td>
+                      <td><strong>Al-Madina Kirana Stores</strong></td>
+                      <td><span style="font-size: 11px; color: #b45309; font-weight: 700;">Udhar Sale</span></td>
+                      <td>Mustard 15L (10 Tins), Sunflower 1L (50 Pcs)</td>
+                      <td style="font-weight: 800;">₹ 25,250.00</td>
+                      <td><span class="badge-pill badge-partial">Khata Credit</span></td>
+                    </tr>
+                    <tr>
+                      <td style="font-family: monospace; font-weight: 700; color: #1b73e8;">#MO-2026-0841</td>
+                      <td><strong>Gupta Supermarket</strong></td>
+                      <td><span style="font-size: 11px; color: #059669; font-weight: 700;">Cash Sale</span></td>
+                      <td>Soya Bean 15kg (15 Cans)</td>
+                      <td style="font-weight: 800;">₹ 25,800.00</td>
+                      <td><span class="badge-pill badge-paid">UPI Received</span></td>
+                    </tr>
+                    <tr>
+                      <td style="font-family: monospace; font-weight: 700; color: #1b73e8;">#INW-TANKER-99</td>
+                      <td><strong>Gujarat Oil Mill Corp</strong></td>
+                      <td><span style="font-size: 11px; color: #7c3aed; font-weight: 700;">Purchase</span></td>
+                      <td>Crude Mustard Tanker (12,000 Litres)</td>
+                      <td style="font-weight: 800; color: #ef4444;">₹ 12,40,000.00</td>
+                      <td><span class="badge-pill badge-alert">Mill Payable</span></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- RIGHT COLUMN: PENDING ACTIONS PANEL (EXACT SCREENSHOT) -->
+          <div>
+            <div class="pending-actions-card">
+              <!-- Pending Actions Tabs -->
+              <div class="pending-header-tabs">
+                <button class="pending-tab-toggle active" id="tabPendingBtn" onclick="switchPendingTab('actions')">Pending Actions</button>
+                <button class="pending-tab-toggle" id="tabActivityBtn" onclick="switchPendingTab('activities')">Recent Activities</button>
+              </div>
+
+              <!-- Content for Pending Actions -->
+              <div id="pendingActionsBox">
+                <!-- SALES CATEGORY (ORANGE) -->
+                <div class="action-category-box">
+                  <div class="category-header-title">
+                    <span>🛒</span> SALES & DISPATCH
+                  </div>
+                  <div class="action-row-item" onclick="showToast('Packing 180 Tins for tomorrow wholesale dispatch')">
+                    <div class="item-left">
+                      <span>›</span>
+                      <span>To Be Packed</span>
+                    </div>
+                    <div class="item-count">180.000 Tin</div>
+                  </div>
+                  <div class="action-row-item" onclick="showToast('95 Jars loading on delivery tempo')">
+                    <div class="item-left">
+                      <span>›</span>
+                      <span>To Be Shipped</span>
+                    </div>
+                    <div class="item-count">95.000 Jar</div>
+                  </div>
+                  <div class="action-row-item" onclick="showToast('240 Pouches out for delivery')">
+                    <div class="item-left">
+                      <span>›</span>
+                      <span>To Be Delivered</span>
+                    </div>
+                    <div class="item-count">240.000 Pcs</div>
+                  </div>
+                  <div class="action-row-item" onclick="showToast('112 invoices queued for billing')">
+                    <div class="item-left">
+                      <span>›</span>
+                      <span>To Be Invoiced</span>
+                    </div>
+                    <div class="item-count">112.000</div>
+                  </div>
+                </div>
+
+                <!-- PURCHASES CATEGORY (ORANGE) -->
+                <div class="action-category-box">
+                  <div class="category-header-title">
+                    <span>🛍️</span> PURCHASES (OIL MILLS)
+                  </div>
+                  <div class="action-row-item" onclick="showToast('2 Crude Mustard Oil Tankers arriving today')">
+                    <div class="item-left">
+                      <span>›</span>
+                      <span>To Be Received</span>
+                    </div>
+                    <div class="item-count">2 Tankers</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Activities Box -->
+              <div id="recentActivitiesBox" style="display: none; padding: 16px;">
+                <div style="font-size: 12px; color: #64748b; line-height: 1.6;">
+                  <div>● <strong>#MO-0842</strong> generated for Al-Madina Kirana</div>
+                  <div style="margin-top: 8px;">● <strong>Mustard Oil 15L</strong> stock auto-deducted (10 Tins)</div>
+                  <div style="margin-top: 8px;">● Payment of <strong>₹ 25,800</strong> received via UPI</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Quick Action Card -->
+            <div class="zoho-card" style="margin-top: 20px;">
+              <div class="zoho-card-title" style="margin-bottom: 8px;">⚡ Quick Operations</div>
+              <div style="display: flex; flex-direction: column; gap: 8px;">
+                <button onclick="switchMainTab('pos')" style="background: var(--primary-blue); color: #fff; border: none; padding: 10px; border-radius: 6px; font-weight: 700; font-size: 12.5px; cursor: pointer; text-align: left;">
+                  + Fast Counter POS Billing [F2]
+                </button>
+                <button onclick="switchMainTab('customers')" style="background: #f1f5f9; color: var(--text-dark); border: 1px solid #cbd5e1; padding: 10px; border-radius: 6px; font-weight: 700; font-size: 12.5px; cursor: pointer; text-align: left;">
+                  👥 Customer Khata (Udhar / Jama)
+                </button>
+                <button onclick="switchMainTab('suppliers')" style="background: #f1f5f9; color: var(--text-dark); border: 1px solid #cbd5e1; padding: 10px; border-radius: 6px; font-weight: 700; font-size: 12.5px; cursor: pointer; text-align: left;">
+                  🏭 Supplier Management (Payables)
+                </button>
+                <button onclick="openLoginCredsModal()" style="background: #f1f5f9; color: var(--text-dark); border: 1px solid #cbd5e1; padding: 10px; border-radius: 6px; font-weight: 700; font-size: 12.5px; cursor: pointer; text-align: left;">
+                  🔑 View Demo Credentials (2 Logins)
+                </button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- ========================================================
+           MODULE 2: BILLING SYSTEM (FAST POS COUNTER)
+           ======================================================== -->
+      <div id="pane-pos" class="tab-view-pane">
+        <div class="zoho-card-header" style="margin-bottom: 16px;">
+          <div>
+            <h2 style="font-size: 18px; font-weight: 800; color: #0f172a;">⚡ Fast POS Billing Counter - Mansoori Oil</h2>
+            <p style="font-size: 12px; color: #64748b;">Instant Barcode Scan &bull; 5% Edible Oil GST Auto-Calc &bull; Stock Trigger</p>
+          </div>
+          <button onclick="switchMainTab('dashboard')" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 6px 14px; border-radius: 6px; font-weight: 700; cursor: pointer;">← Back to Dashboard</button>
+        </div>
+
+        <div class="pos-container">
+          <!-- Left: Catalog & Search -->
+          <div>
+            <div style="background: #ffffff; border: 1px solid var(--border-light); border-radius: 8px; padding: 14px; margin-bottom: 14px; display: flex; gap: 8px;">
+              <input type="text" id="barcodeSearchInput" placeholder="Scan Barcode or Search Oil (e.g. Mustard, 15L, Sunflower)..." 
+                     style="flex-grow: 1; padding: 10px 14px; border: 1.5px solid #cbd5e1; border-radius: 6px; font-size: 13px; outline: none;"
+                     onkeypress="handleBarcodeEnter(event)">
+              <button onclick="showToast('Barcode scanner ready [F2]')" style="background: var(--primary-blue); color: #fff; border: none; padding: 0 18px; border-radius: 6px; font-weight: 700; font-size: 13px; cursor: pointer;">🔍 Scan</button>
+            </div>
+
+            <div class="pos-catalog-grid" id="posCatalogItems">
+              <!-- Rendered via JS -->
+            </div>
+          </div>
+
+          <!-- Right: Cart & Calculation -->
+          <div>
+            <div class="pos-cart-box">
+              <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-light); padding-bottom: 10px; margin-bottom: 10px;">
+                <strong style="font-size: 14px; color: #0f172a;">Active Bill</strong>
+                <span style="font-size: 11px; background: #e0f2fe; color: #0284c7; padding: 2px 8px; border-radius: 4px; font-weight: 700;">GST 5%</span>
+              </div>
+
+              <!-- Select Customer for Bill -->
+              <div style="margin-bottom: 12px;">
+                <label style="font-size: 11.5px; font-weight: 700; color: #64748b; display: block; margin-bottom: 4px;">Bill To Customer:</label>
+                <select id="posCustomerSelect" class="form-control" style="font-weight: 600;">
+                  <option value="Walk-In Customer (Cash)">Walk-In Customer (Cash)</option>
+                  <option value="Al-Madina Kirana Stores" selected>Al-Madina Kirana Stores (Credit Khata)</option>
+                  <option value="Gupta Supermarket">Gupta Supermarket</option>
+                  <option value="City Food Caterers">City Food Caterers</option>
+                </select>
+              </div>
+
+              <div id="cartItemsList" style="min-height: 160px; max-height: 240px; overflow-y: auto;">
+                <!-- Cart rows -->
+              </div>
+
+              <!-- Cart Summary -->
+              <div style="border-top: 1.5px solid var(--border-light); padding-top: 12px; margin-top: 12px;">
+                <div style="display: flex; justify-content: space-between; font-size: 13px; color: #475569; margin-bottom: 4px;">
+                  <span>Subtotal:</span>
+                  <span id="cartSubtotal" style="font-weight: 700;">₹ 0.00</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; font-size: 13px; color: #475569; margin-bottom: 8px;">
+                  <span>GST (5% Edible Oil):</span>
+                  <span id="cartTax">₹ 0.00</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; font-size: 17px; font-weight: 800; color: #0f172a; padding: 8px 0; border-top: 1px dashed #cbd5e1;">
+                  <span>Net Payable:</span>
+                  <span id="cartNetPayable" style="color: #1b73e8;">₹ 0.00</span>
+                </div>
+
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin: 12px 0;">
+                  <button onclick="setPaymentMode('Cash')" style="background: #10b981; color: #fff; border: none; padding: 8px; border-radius: 4px; font-weight: 700; font-size: 11.5px; cursor: pointer;">💵 Cash</button>
+                  <button onclick="setPaymentMode('UPI')" style="background: #1b73e8; color: #fff; border: none; padding: 8px; border-radius: 4px; font-weight: 700; font-size: 11.5px; cursor: pointer;">📱 UPI / QR</button>
+                  <button onclick="setPaymentMode('Khata')" style="background: #f59e0b; color: #fff; border: none; padding: 8px; border-radius: 4px; font-weight: 700; font-size: 11.5px; cursor: pointer;">📖 Udhar Khata</button>
+                </div>
+
+                <button onclick="completePOSSale()" style="width: 100%; background: #059669; color: #fff; border: none; padding: 12px; border-radius: 6px; font-weight: 800; font-size: 14px; cursor: pointer; box-shadow: 0 4px 12px rgba(5,150,105,0.3);">
+                  ⚡ Complete Bill & Print Receipt [Enter]
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========================================================
+           MODULE 3: CUSTOMER MANAGEMENT (KHATA & HISAB KITAB)
+           ======================================================== -->
+      <div id="pane-customers" class="tab-view-pane">
+        <div class="zoho-card">
+          <div class="zoho-card-header">
+            <div>
+              <h2 style="font-size: 17px; font-weight: 800; color: #0f172a;">👥 Customer Khata Management (Udhar / Jama)</h2>
+              <p style="font-size: 12px; color: #64748b;">Customer running balance, credit limits & automated WhatsApp reminders</p>
+            </div>
+            <button onclick="openAddCustomerModal()" class="btn-quick-plus" style="width: auto; height: auto; padding: 7px 16px; font-size: 12px;">+ Add New Customer</button>
+          </div>
+
+          <div class="table-wrap">
+            <table class="zoho-table">
+              <thead>
+                <tr>
+                  <th>Customer Name</th>
+                  <th>Contact Number</th>
+                  <th>Credit Limit</th>
+                  <th>Outstanding Udhar</th>
+                  <th>Last Payment</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="customersTableBody">
+                <!-- Rendered via JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========================================================
+           MODULE 4: SUPPLIER MANAGEMENT (MILLS & VENDORS)
+           ======================================================== -->
+      <div id="pane-suppliers" class="tab-view-pane">
+        <div class="zoho-card">
+          <div class="zoho-card-header">
+            <div>
+              <h2 style="font-size: 17px; font-weight: 800; color: #0f172a;">🏭 Supplier Management (Oil Mills & Payables)</h2>
+              <p style="font-size: 12px; color: #64748b;">Crude oil supply, tanker bills, packaging manufacturers & pending dues</p>
+            </div>
+            <button onclick="openAddSupplierModal()" class="btn-quick-plus" style="width: auto; height: auto; padding: 7px 16px; font-size: 12px;">+ Add New Supplier</button>
+          </div>
+
+          <div class="table-wrap">
+            <table class="zoho-table">
+              <thead>
+                <tr>
+                  <th>Supplier / Mill Name</th>
+                  <th>Supply Type</th>
+                  <th>Contact Person</th>
+                  <th>Total Due Amount</th>
+                  <th>Payment Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="suppliersTableBody">
+                <!-- Rendered via JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========================================================
+           MODULE 5: INVENTORY MANAGEMENT (OIL STOCK)
+           ======================================================== -->
+      <div id="pane-inventory" class="tab-view-pane">
+        <div class="zoho-card">
+          <div class="zoho-card-header">
+            <div>
+              <h2 style="font-size: 17px; font-weight: 800; color: #0f172a;">🛢️ Mansoori Oil Inventory Management</h2>
+              <p style="font-size: 12px; color: #64748b;">Real-time stock deduction with automatic threshold reorder triggers</p>
+            </div>
+            <button onclick="openAddProductModal()" class="btn-quick-plus" style="width: auto; height: auto; padding: 7px 16px; font-size: 12px;">+ Add New Oil SKU</button>
+          </div>
+
+          <div class="table-wrap">
+            <table class="zoho-table">
+              <thead>
+                <tr>
+                  <th>SKU Code</th>
+                  <th>Product / Oil Name</th>
+                  <th>Packaging Unit</th>
+                  <th>Wholesale Price</th>
+                  <th>Stock Available</th>
+                  <th>Threshold</th>
+                  <th>Status</th>
+                  <th>Stock Adjust</th>
+                </tr>
+              </thead>
+              <tbody id="inventoryListBody">
+                <!-- Rendered by JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========================================================
+           CUSTOMER SELF-SERVICE VIEW (FOR CLIENT EVALUATION)
+           ======================================================== -->
+      <div id="pane-cust-passbook" class="tab-view-pane">
+        <div class="zoho-card" style="background: linear-gradient(135deg, #1e3a8a, #1e40af); color: #fff; border: none;">
+          <div style="font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; opacity: 0.9;">CUSTOMER KHATA PASSBOOK</div>
+          <h2 style="font-size: 22px; font-weight: 800; margin-top: 4px;">Al-Madina Kirana Stores</h2>
+          <div style="margin-top: 16px; display: flex; gap: 30px; align-items: flex-end; flex-wrap: wrap;">
+            <div>
+              <div style="font-size: 12px; opacity: 0.85;">CURRENT OUTSTANDING BALANCE:</div>
+              <div style="font-size: 32px; font-weight: 900; color: #fde047;" id="custPortalBalance">₹ 48,500.00</div>
+            </div>
+            <button onclick="customerPayUPI()" style="background: #10b981; color: #fff; border: none; padding: 10px 20px; border-radius: 6px; font-weight: 800; font-size: 14px; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.2);">
+              📲 Pay via PhonePe / GPay QR
+            </button>
+          </div>
+        </div>
+
+        <div class="zoho-card">
+          <div class="zoho-card-title" style="margin-bottom: 12px;">Invoices from Mansoori Oil</div>
+          <table class="zoho-table">
+            <thead>
+              <tr>
+                <th>Bill No</th>
+                <th>Date</th>
+                <th>Quantity</th>
+                <th>Amount</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="font-family: monospace; font-weight: 700; color: #1b73e8;">#MO-2026-0842</td>
+                <td>17 Oct 2026</td>
+                <td>Mustard 15L (10 Tins), Sunflower 1L (50 Pcs)</td>
+                <td style="font-weight: 700;">₹ 25,250.00</td>
+                <td><button onclick="showToast('Downloading Bill PDF...')" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 4px 8px; border-radius: 4px; cursor: pointer;">📥 Download</button></td>
+              </tr>
+              <tr>
+                <td style="font-family: monospace; font-weight: 700; color: #1b73e8;">#MO-2026-0810</td>
+                <td>10 Oct 2026</td>
+                <td>Groundnut Oil 5L (30 Jars)</td>
+                <td style="font-weight: 700;">₹ 23,250.00</td>
+                <td><button onclick="showToast('Downloading Bill PDF...')" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 4px 8px; border-radius: 4px; cursor: pointer;">📥 Download</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- FLOATING ACTION BUTTON -->
+  <a href="Mansoori_Oil_Prototype_and_Flow.pdf" target="_blank" class="support-floating-btn" title="Download Full Technical PDF Blueprint">
+    <span>📄 Download Mansoori Oil PDF</span>
+  </a>
+
+  <!-- ========================================================
+       MODAL 1: 2-ROLE CREDENTIALS SELECTOR
+       ======================================================== -->
+  <div class="creds-modal-overlay" id="credsModal">
+    <div class="creds-modal-card">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+        <h3 style="font-size: 16px; font-weight: 800; color: #0f172a;">🔑 Choose Demo Portal (2 Accounts)</h3>
+        <button onclick="closeLoginCredsModal()" style="background: none; border: none; font-size: 18px; cursor: pointer; color: #64748b;">✕</button>
+      </div>
+
+      <p style="font-size: 12.5px; color: #64748b; margin-bottom: 14px;">
+        Client evaluation ke liye exactly 2 roles configure kiye gaye hain:
+      </p>
+
+      <!-- Box 1: Store Admin -->
+      <div class="cred-box selected" id="boxAdmin" onclick="chooseCred('admin')">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <strong style="color: #1b73e8; font-size: 13.5px;">🛡️ Store Owner Portal (Mansoori Oil)</strong>
+          <span class="badge-pill badge-paid">Full Access</span>
+        </div>
+        <div style="font-size: 12px; color: #334155; margin-top: 6px;">
+          <div><strong>Email:</strong> <code>admin@mansoorioil.com</code></div>
+          <div><strong>Password:</strong> <code>Admin@123</code></div>
+        </div>
+        <div style="font-size: 11px; color: #64748b; margin-top: 4px;">
+          Access to POS Billing Counter, Customer Khata, Supplier Payables, and Oil Inventory.
+        </div>
+      </div>
+
+      <!-- Box 2: Customer -->
+      <div class="cred-box" id="boxCustomer" onclick="chooseCred('customer')">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <strong style="color: #059669; font-size: 13.5px;">👤 Customer Portal (Al-Madina Kirana)</strong>
+          <span class="badge-pill badge-partial">Self-Service</span>
+        </div>
+        <div style="font-size: 12px; color: #334155; margin-top: 6px;">
+          <div><strong>Email:</strong> <code>customer@mansoorioil.com</code></div>
+          <div><strong>Password:</strong> <code>Customer@123</code></div>
+        </div>
+        <div style="font-size: 11px; color: #64748b; margin-top: 4px;">
+          Access to Customer Khata Balance (₹ 48,500), Invoices, and Instant UPI Pay.
+        </div>
+      </div>
+
+      <div style="margin-top: 18px; display: flex; gap: 8px;">
+        <button id="btnSwitchApply" onclick="applyPortalSwitch()" style="flex-grow: 1; background: var(--primary-blue); color: #fff; border: none; padding: 11px; border-radius: 6px; font-weight: 700; font-size: 13px; cursor: pointer;">
+          Switch to Owner Portal →
+        </button>
+        <button onclick="closeLoginCredsModal()" style="background: #f1f5f9; color: var(--text-dark); border: 1px solid #cbd5e1; padding: 11px 16px; border-radius: 6px; font-weight: 700; cursor: pointer;">
+          Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================
+       MODAL 2: PRINTABLE THERMAL RECEIPT
+       ======================================================== -->
+  <div class="creds-modal-overlay" id="printModal">
+    <div class="creds-modal-card" style="max-width: 380px; font-family: 'JetBrains Mono', monospace;">
+      <div style="text-align: center; border-bottom: 2px dashed #334155; padding-bottom: 12px; margin-bottom: 12px;">
+        <div style="font-size: 17px; font-weight: 800; color: #0f172a;">MANSOORI OIL DEPOT</div>
+        <div style="font-size: 10px; color: #64748b;">Wholesale Oil Merchants &bull; GST: 27AABCM8921P1Z5</div>
+        <div style="font-size: 10px; color: #64748b;">Market Yard, Mumbai &bull; Tel: 1800 123 4567</div>
+      </div>
+
+      <div style="font-size: 11px; color: #334155; margin-bottom: 10px; line-height: 1.5;">
+        <div><strong>Bill No:</strong> <span id="recpNo">#MO-0843</span></div>
+        <div><strong>Date:</strong> <span id="recpDate">17/10/2026</span></div>
+        <div><strong>Customer:</strong> <span id="recpCustomer">Al-Madina Kirana</span></div>
+        <div><strong>Payment Mode:</strong> <span id="recpMode">Cash</span></div>
+      </div>
+
+      <div style="border-top: 1px dashed #cbd5e1; border-bottom: 1px dashed #cbd5e1; padding: 8px 0; font-size: 11px;" id="recpItemsList">
+        <!-- Lines -->
+      </div>
+
+      <div style="margin-top: 10px; font-size: 11.5px; line-height: 1.6;">
+        <div style="display: flex; justify-content: space-between;"><span>Subtotal:</span><span id="recpSub">₹ 0.00</span></div>
+        <div style="display: flex; justify-content: space-between;"><span>CGST (2.5%):</span><span id="recpCGST">₹ 0.00</span></div>
+        <div style="display: flex; justify-content: space-between;"><span>SGST (2.5%):</span><span id="recpSGST">₹ 0.00</span></div>
+        <div style="display: flex; justify-content: space-between; font-size: 14px; font-weight: 800; border-top: 1px solid #334155; padding-top: 4px; margin-top: 4px;">
+          <span>TOTAL PAID:</span><span id="recpNet">₹ 0.00</span>
+        </div>
+      </div>
+
+      <div style="text-align: center; margin-top: 16px; font-size: 10px; color: #64748b;">
+        <div>Thank You For Your Business!</div>
+        <div style="margin-top: 4px; font-size: 9px;">Engineered & Powered by <strong>NexaBix Technologies</strong></div>
+      </div>
+
+      <div style="margin-top: 14px; display: flex; gap: 8px;">
+        <button onclick="window.print()" style="flex-grow: 1; background: #1b73e8; color: #fff; border: none; padding: 10px; border-radius: 4px; font-weight: 700; cursor: pointer;">🖨️ Print Receipt</button>
+        <button onclick="closePrintModal()" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 10px 14px; border-radius: 4px; cursor: pointer;">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICATION -->
+  <div id="toastMsg" style="position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: #0f172a; color: #fff; padding: 10px 20px; border-radius: 8px; font-size: 13px; font-weight: 600; box-shadow: 0 4px 15px rgba(0,0,0,0.3); display: none; z-index: 9999;">
+    Notification
+  </div>
+
+  <!-- ========================================================
+       JAVASCRIPT LOGIC
+       ======================================================== -->
+  <script>
+    // State Data
+    let currentRole = 'admin';
+    let chosenCred = 'admin';
+    let selectedPayMode = 'Cash';
+    let posCartItems = [];
+
+    // 1. Inventory Items
+    let inventoryData = [
+      { id: 1, sku: 'MO-MUST-15L', name: 'Pure Mustard Oil 15L Tin', cat: 'Mustard', cost: 1650, price: 1850, stock: 140, threshold: 50, icon: '🛢️', unit: 'Tin' },
+      { id: 2, sku: 'MO-SUN-1L', name: 'Refined Sunflower Oil 1L', cat: 'Sunflower', cost: 115, price: 135, stock: 850, threshold: 200, icon: '🌻', unit: 'Pouch' },
+      { id: 3, sku: 'MO-GND-5L', name: 'Premium Groundnut Oil 5L', cat: 'Groundnut', cost: 690, price: 780, stock: 65, threshold: 80, icon: '🥜', unit: 'Jar' },
+      { id: 4, sku: 'MO-SOYA-15K', name: 'Pure Soya Bean Oil 15kg Can', cat: 'Soya Bean', cost: 1540, price: 1720, stock: 90, threshold: 40, icon: '🌾', unit: 'Can' },
+      { id: 5, sku: 'MO-SES-500', name: 'Cold Pressed Sesame Oil 500ml', cat: 'Sesame', cost: 135, price: 160, stock: 210, threshold: 50, icon: '🫒', unit: 'Bottle' },
+      { id: 6, sku: 'MO-PALM-15L', name: 'Fortified Palmolein Oil 15L', cat: 'Palmolein', cost: 1320, price: 1480, stock: 110, threshold: 50, icon: '🌴', unit: 'Tin' }
+    ];
+
+    // 2. Customers (Khata)
+    let customersData = [
+      { id: 101, name: 'Al-Madina Kirana Stores', phone: '+91 98201 44556', limit: 100000, balance: 48500, lastPay: '₹ 15,000 on 10 Oct' },
+      { id: 102, name: 'Gupta Supermarket', phone: '+91 98112 33445', limit: 50000, balance: 0, lastPay: '₹ 25,800 on 16 Oct' },
+      { id: 103, name: 'City Food Caterers', phone: '+91 97654 11223', limit: 80000, balance: 18200, lastPay: '₹ 10,000 on 05 Oct' },
+      { id: 104, name: 'New Bharat General Store', phone: '+91 98920 77889', limit: 60000, balance: 32400, lastPay: '₹ 8,000 on 12 Oct' }
+    ];
+
+    // 3. Suppliers (Mills & Payables)
+    let suppliersData = [
+      { id: 201, name: 'Gujarat Oil Mill Corporation', supply: 'Crude Mustard & Groundnut Tankers', contact: 'Rajesh Patel (+91 98790 12345)', due: 320000, status: 'Tanker Due in 7 Days' },
+      { id: 202, name: 'Adani Wilmar Depot', supply: 'Refined Palm & Sunflower Oil', contact: 'Kunal Verma (+91 98210 67890)', due: 142000, status: 'Regular Account' },
+      { id: 203, name: 'Shivam Tin Packaging Industries', supply: 'Empty 15L Tins & 5L Jars', contact: 'Mahesh Sharma (+91 98223 44556)', due: 50000, status: 'Payment Scheduled' }
+    ];
+
+    document.addEventListener('DOMContentLoaded', () => {
+      renderPOSCatalog();
+      renderInventoryGrid();
+      renderCustomersTable();
+      renderSuppliersTable();
+      // Pre-add 1 tin to cart
+      addProductToCart(1);
+    });
+
+    // Mobile Sidebar Drawer Toggle
+    function toggleMobileSidebar() {
+      const s = document.getElementById('appSidebar');
+      const b = document.getElementById('mobileBackdrop');
+      s.classList.toggle('open-mobile');
+      b.style.display = s.classList.contains('open-mobile') ? 'block' : 'none';
+    }
+
+    // Switch Main Tabs (Dashboard, POS, Customers, Suppliers, Inventory)
+    function switchMainTab(tabKey) {
+      document.getElementById('appSidebar').classList.remove('open-mobile');
+      document.getElementById('mobileBackdrop').style.display = 'none';
+
+      document.querySelectorAll('.tab-view-pane').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.sub-tab-btn').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.sidebar-item-btn').forEach(el => el.classList.remove('active'));
+
+      if (tabKey === 'dashboard') {
+        document.getElementById('pane-dashboard').classList.add('active');
+        document.getElementById('subTabDash').classList.add('active');
+        document.getElementById('menuDash').classList.add('active');
+      } else if (tabKey === 'pos') {
+        document.getElementById('pane-pos').classList.add('active');
+        document.getElementById('subTabPOS').classList.add('active');
+        document.getElementById('menuPOS').classList.add('active');
+      } else if (tabKey === 'customers') {
+        document.getElementById('pane-customers').classList.add('active');
+        document.getElementById('subTabCust').classList.add('active');
+        document.getElementById('menuCust').classList.add('active');
+      } else if (tabKey === 'suppliers') {
+        document.getElementById('pane-suppliers').classList.add('active');
+        document.getElementById('subTabSupp').classList.add('active');
+        document.getElementById('menuSupp').classList.add('active');
+      } else if (tabKey === 'inventory') {
+        document.getElementById('pane-inventory').classList.add('active');
+        document.getElementById('subTabInv').classList.add('active');
+        document.getElementById('menuInv').classList.add('active');
+      } else if (tabKey === 'cust-passbook' || tabKey === 'cust-invoices' || tabKey === 'cust-upi') {
+        document.getElementById('pane-cust-passbook').classList.add('active');
+      }
+    }
+
+    // Switch Role Mode (Owner/Admin vs Customer)
+    function switchPortalMode(role) {
+      currentRole = role;
+      const pAdmin = document.getElementById('pillAdmin');
+      const pCust = document.getElementById('pillCustomer');
+      const adminMenu = document.getElementById('adminMenuList');
+      const custMenu = document.getElementById('customerMenuList');
+
+      if (role === 'admin') {
+        pAdmin.classList.add('active-admin');
+        pCust.classList.remove('active-customer');
+        adminMenu.style.display = 'block';
+        custMenu.style.display = 'none';
+
+        document.getElementById('sidebarAvatar').innerText = 'M';
+        document.getElementById('sidebarUserName').innerText = 'Mansoori Admin';
+        document.getElementById('sidebarUserRole').innerText = 'Store Owner';
+        document.getElementById('greetingHeading').innerText = 'Hello, Mansoori Oil (Admin)';
+        document.getElementById('greetingSub').innerText = 'Mansoori Oil Depot • GSTIN: 27AABCM8921P1Z5 • Wholesale Market Yard, Mumbai';
+        document.getElementById('sidebarStatusText').innerText = 'LIVE STORE ACTIVE';
+
+        switchMainTab('dashboard');
+        showToast('🛡️ Switched to Owner / Admin Portal');
+      } else {
+        pCust.classList.add('active-customer');
+        pAdmin.classList.remove('active-admin');
+        adminMenu.style.display = 'none';
+        custMenu.style.display = 'block';
+
+        document.getElementById('sidebarAvatar').innerText = 'A';
+        document.getElementById('sidebarUserName').innerText = 'Al-Madina Kirana';
+        document.getElementById('sidebarUserRole').innerText = 'Verified Customer';
+        document.getElementById('greetingHeading').innerText = 'Hello, Al-Madina Kirana (Wholesale Partner)';
+        document.getElementById('greetingSub').innerText = 'Account Linked with Mansoori Oil • Credit Limit: ₹ 1,00,000';
+        document.getElementById('sidebarStatusText').innerText = 'CUSTOMER KHATA ACTIVE';
+
+        switchMainTab('cust-passbook');
+        showToast('👤 Switched to Customer Self-Service Portal');
+      }
+    }
+
+    // Pending Actions Toggle
+    function switchPendingTab(mode) {
+      const btnA = document.getElementById('tabPendingBtn');
+      const btnB = document.getElementById('tabActivityBtn');
+      const boxA = document.getElementById('pendingActionsBox');
+      const boxB = document.getElementById('recentActivitiesBox');
+
+      if (mode === 'actions') {
+        btnA.classList.add('active');
+        btnB.classList.remove('active');
+        boxA.style.display = 'block';
+        boxB.style.display = 'none';
+      } else {
+        btnB.classList.add('active');
+        btnA.classList.remove('active');
+        boxA.style.display = 'none';
+        boxB.style.display = 'block';
+      }
+    }
+
+    // POS Catalog Render
+    function renderPOSCatalog() {
+      const container = document.getElementById('posCatalogItems');
+      if (!container) return;
+      container.innerHTML = '';
+      inventoryData.forEach(item => {
+        const div = document.createElement('div');
+        div.className = 'pos-item-card';
+        div.onclick = () => addProductToCart(item.id);
+        div.innerHTML = `
+          <div style="font-size: 26px; text-align: center; margin-bottom: 6px;">${item.icon}</div>
+          <div style="font-size: 12px; font-weight: 700; color: #0f172a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${item.name}</div>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 6px;">
+            <span style="font-weight: 800; color: #1b73e8; font-size: 13.5px;">₹ ${item.price}</span>
+            <span style="font-size: 10.5px; color: #059669; font-weight: 700;">${item.stock} ${item.unit}</span>
+          </div>
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    // Cart Logic
+    function addProductToCart(id) {
+      const prod = inventoryData.find(p => p.id === id);
+      if (!prod) return;
+      const exist = posCartItems.find(i => i.id === id);
+      if (exist) {
+        exist.qty += 1;
+      } else {
+        posCartItems.push({ id: prod.id, name: prod.name, price: prod.price, qty: 1, unit: prod.unit, tax: 5 });
+      }
+      renderPOSCart();
+    }
+
+    function quickBillProduct(name, price) {
+      const prod = inventoryData.find(p => p.name.includes(name)) || { id: 99, name: name, price: price, qty: 1, unit: 'Pcs', tax: 5 };
+      addProductToCart(prod.id);
+      switchMainTab('pos');
+      showToast(`Added ${name} to bill!`);
+    }
+
+    function updateCartQty(id, delta) {
+      const item = posCartItems.find(i => i.id === id);
+      if (item) {
+        item.qty += delta;
+        if (item.qty <= 0) {
+          posCartItems = posCartItems.filter(i => i.id !== id);
+        }
+      }
+      renderPOSCart();
+    }
+
+    function renderPOSCart() {
+      const list = document.getElementById('cartItemsList');
+      if (!list) return;
+      list.innerHTML = '';
+
+      let subtotal = 0;
+      let taxAmt = 0;
+
+      if (posCartItems.length === 0) {
+        list.innerHTML = '<div style="text-align: center; color: #94a3b8; font-size: 12px; padding: 40px 0;">Cart is empty. Click oil items to add.</div>';
+      }
+
+      posCartItems.forEach(i => {
+        const line = i.price * i.qty;
+        subtotal += line;
+        taxAmt += line * 0.05;
+
+        const row = document.createElement('div');
+        row.className = 'cart-item-row';
+        row.innerHTML = `
+          <div style="flex-grow: 1;">
+            <strong style="color: #0f172a;">${i.name}</strong>
+            <div style="color: #64748b; font-size: 11px;">₹ ${i.price} × ${i.qty} ${i.unit}</div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 6px;">
+            <button onclick="updateCartQty(${i.id}, -1)" style="width: 22px; height: 22px; border: 1px solid #cbd5e1; background: #f8fafc; border-radius: 4px; cursor: pointer;">-</button>
+            <span style="font-weight: 700; min-width: 18px; text-align: center;">${i.qty}</span>
+            <button onclick="updateCartQty(${i.id}, 1)" style="width: 22px; height: 22px; border: 1px solid #cbd5e1; background: #f8fafc; border-radius: 4px; cursor: pointer;">+</button>
+            <span style="font-weight: 800; min-width: 65px; text-align: right; color: #1b73e8;">₹ ${line.toFixed(2)}</span>
+          </div>
+        `;
+        list.appendChild(row);
+      });
+
+      const net = subtotal + taxAmt;
+      document.getElementById('cartSubtotal').innerText = '₹ ' + subtotal.toFixed(2);
+      document.getElementById('cartTax').innerText = '₹ ' + taxAmt.toFixed(2);
+      document.getElementById('cartNetPayable').innerText = '₹ ' + net.toFixed(2);
+    }
+
+    function setPaymentMode(mode) {
+      selectedPayMode = mode;
+      showToast('Payment mode set to: ' + mode);
+    }
+
+    function completePOSSale() {
+      if (posCartItems.length === 0) {
+        alert('Please add oil items to cart first!');
+        return;
+      }
+      let sub = 0;
+      let tax = 0;
+      posCartItems.forEach(i => {
+        const line = i.price * i.qty;
+        sub += line;
+        tax += line * 0.05;
+
+        // Auto-deduct from stock
+        const p = inventoryData.find(item => item.id === i.id);
+        if (p) p.stock = Math.max(0, p.stock - i.qty);
+      });
+      const net = sub + tax;
+      const invNo = '#MO-2026-0' + Math.floor(843 + Math.random() * 50);
+      const custName = document.getElementById('posCustomerSelect').value;
+
+      // If credit khata, add to customer balance
+      if (selectedPayMode === 'Khata' && custName.includes('Al-Madina')) {
+        const c = customersData.find(cust => cust.id === 101);
+        if (c) c.balance += net;
+        renderCustomersTable();
+      }
+
+      renderInventoryGrid();
+      openPrintModal(invNo, net, custName, posCartItems);
+      posCartItems = [];
+      renderPOSCart();
+      showToast('🎉 Mansoori Oil Bill Generated & Stock Decremented!');
+    }
+
+    // Render Customers Table (Khata)
+    function renderCustomersTable() {
+      const tbody = document.getElementById('customersTableBody');
+      if (!tbody) return;
+      tbody.innerHTML = '';
+      let totalUdhar = 0;
+
+      customersData.forEach(c => {
+        totalUdhar += c.balance;
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><strong>${c.name}</strong></td>
+          <td>${c.phone}</td>
+          <td>₹ ${c.limit.toLocaleString()}</td>
+          <td style="font-weight: 800; color: ${c.balance > 0 ? '#ef4444' : '#059669'};">₹ ${c.balance.toFixed(2)}</td>
+          <td style="font-size: 11px; color: #64748b;">${c.lastPay}</td>
+          <td>
+            <button onclick="sendWhatsApp('${c.name}', ${c.balance})" style="background: #25d366; color: #fff; border: none; padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: 700; cursor: pointer;">📲 WhatsApp</button>
+            <button onclick="recordCustomerPayment(${c.id})" style="background: #1b73e8; color: #fff; border: none; padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: 700; cursor: pointer; margin-left: 4px;">₹ Jama (Pay)</button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      document.getElementById('dashTotalReceivables').innerText = '₹ ' + totalUdhar.toLocaleString();
+      const pBal = document.getElementById('custPortalBalance');
+      if (pBal) pBal.innerText = '₹ ' + customersData[0].balance.toLocaleString() + '.00';
+    }
+
+    function recordCustomerPayment(id) {
+      const cust = customersData.find(c => c.id === id);
+      if (!cust) return;
+      const amtStr = prompt(`Enter received payment amount (Jama) for ${cust.name}:`, cust.balance);
+      if (amtStr && !isNaN(amtStr)) {
+        const amt = parseFloat(amtStr);
+        cust.balance = Math.max(0, cust.balance - amt);
+        cust.lastPay = `₹ ${amt} on ` + new Date().toLocaleDateString();
+        renderCustomersTable();
+        showToast(`✓ Payment of ₹ ${amt} recorded for ${cust.name}`);
+      }
+    }
+
+    function openAddCustomerModal() {
+      const name = prompt('Enter new Customer / Store Name:');
+      if (!name) return;
+      const phone = prompt('Enter Contact Number:', '+91 ');
+      const limit = prompt('Enter Credit Limit (₹):', '50000');
+      customersData.push({
+        id: Date.now(),
+        name: name,
+        phone: phone || '-',
+        limit: parseFloat(limit) || 50000,
+        balance: 0,
+        lastPay: 'No payments yet'
+      });
+      renderCustomersTable();
+      showToast(`✓ Customer "${name}" added to Khata book!`);
+    }
+
+    // Render Suppliers Table (Payables)
+    function renderSuppliersTable() {
+      const tbody = document.getElementById('suppliersTableBody');
+      if (!tbody) return;
+      tbody.innerHTML = '';
+      let totalDue = 0;
+
+      suppliersData.forEach(s => {
+        totalDue += s.due;
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><strong>${s.name}</strong></td>
+          <td>${s.supply}</td>
+          <td>${s.contact}</td>
+          <td style="font-weight: 800; color: #ef4444;">₹ ${s.due.toLocaleString()}</td>
+          <td><span class="badge-pill ${s.due > 0 ? 'badge-alert' : 'badge-paid'}">${s.status}</span></td>
+          <td>
+            <button onclick="recordSupplierPayment(${s.id})" style="background: #10b981; color: #fff; border: none; padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: 700; cursor: pointer;">Record Payment</button>
+            <button onclick="recordTankerInward(${s.id})" style="background: #f1f5f9; color: #0f172a; border: 1px solid #cbd5e1; padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: 700; cursor: pointer; margin-left: 4px;">+ Inward Bill</button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      document.getElementById('dashTotalPayables').innerText = '₹ ' + totalDue.toLocaleString();
+    }
+
+    function recordSupplierPayment(id) {
+      const supp = suppliersData.find(s => s.id === id);
+      if (!supp) return;
+      const amtStr = prompt(`Enter payment amount made to ${supp.name}:`, supp.due);
+      if (amtStr && !isNaN(amtStr)) {
+        const amt = parseFloat(amtStr);
+        supp.due = Math.max(0, supp.due - amt);
+        supp.status = supp.due === 0 ? 'Fully Cleared' : 'Partially Paid';
+        renderSuppliersTable();
+        showToast(`✓ Payment of ₹ ${amt} recorded for ${supp.name}`);
+      }
+    }
+
+    function recordTankerInward(id) {
+      const supp = suppliersData.find(s => s.id === id);
+      if (!supp) return;
+      const amtStr = prompt(`Enter inward tanker invoice amount for ${supp.name}:`, '450000');
+      if (amtStr && !isNaN(amtStr)) {
+        const amt = parseFloat(amtStr);
+        supp.due += amt;
+        supp.status = 'New Tanker Inward Added';
+        renderSuppliersTable();
+        showToast(`✓ Inward bill of ₹ ${amt} added to supplier ledger`);
+      }
+    }
+
+    function openAddSupplierModal() {
+      const name = prompt('Enter new Oil Mill / Supplier Name:');
+      if (!name) return;
+      const supply = prompt('Enter Supply Item (e.g. Mustard Tankers, Packaging):', 'Crude Oil Supply');
+      const due = prompt('Opening Balance Due (₹):', '0');
+      suppliersData.push({
+        id: Date.now(),
+        name: name,
+        supply: supply,
+        contact: 'Manager (+91 98000 00000)',
+        due: parseFloat(due) || 0,
+        status: 'Active Account'
+      });
+      renderSuppliersTable();
+      showToast(`✓ Supplier "${name}" added to Payables ledger!`);
+    }
+
+    // Render Inventory Grid
+    function renderInventoryGrid() {
+      const tbody = document.getElementById('inventoryListBody');
+      if (!tbody) return;
+      tbody.innerHTML = '';
+      let totalUnits = 0;
+
+      inventoryData.forEach(p => {
+        totalUnits += p.stock;
+        const isLow = p.stock <= p.threshold;
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td style="font-family: monospace; font-weight: 700; color: #1b73e8;">${p.sku}</td>
+          <td><strong>${p.icon} ${p.name}</strong></td>
+          <td>${p.unit}</td>
+          <td style="font-weight: 700;">₹ ${p.price.toFixed(2)}</td>
+          <td style="font-weight: 800; color: ${isLow ? '#ef4444' : '#059669'};">${p.stock} ${p.unit}s</td>
+          <td>${p.threshold} ${p.unit}s</td>
+          <td><span class="badge-pill ${isLow ? 'badge-alert' : 'badge-paid'}">${isLow ? '⚠️ Low Stock' : '✓ Normal'}</span></td>
+          <td>
+            <button onclick="adjustStock(${p.id}, 10)" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 2px 6px; border-radius: 4px; font-weight: 700; cursor: pointer;">+10</button>
+            <button onclick="adjustStock(${p.id}, -10)" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 2px 6px; border-radius: 4px; font-weight: 700; cursor: pointer; margin-left: 2px;">-10</button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      document.getElementById('dashTotalUnits').innerText = totalUnits.toLocaleString() + ' Units';
+      renderPOSCatalog();
+    }
+
+    function adjustStock(id, delta) {
+      const prod = inventoryData.find(p => p.id === id);
+      if (prod) {
+        prod.stock = Math.max(0, prod.stock + delta);
+        renderInventoryGrid();
+        showToast(`Stock updated for ${prod.name}: ${prod.stock} ${prod.unit}s`);
+      }
+    }
+
+    function openAddProductModal() {
+      const name = prompt('Enter new Oil SKU Name:');
+      if (!name) return;
+      const unit = prompt('Packaging Unit (e.g. Tin, Jar, Pouch, Can):', 'Tin');
+      const price = prompt('Wholesale Selling Rate (₹):', '1500');
+      const stock = prompt('Initial Stock Quantity:', '100');
+      inventoryData.push({
+        id: Date.now(),
+        sku: 'MO-NEW-' + Math.floor(Math.random() * 900),
+        name: name,
+        cat: 'Edible Oil',
+        cost: (parseFloat(price) || 1500) * 0.9,
+        price: parseFloat(price) || 1500,
+        stock: parseInt(stock) || 100,
+        threshold: 30,
+        icon: '🛢️',
+        unit: unit || 'Tin'
+      });
+      renderInventoryGrid();
+      showToast(`✓ Added product "${name}" to inventory!`);
+    }
+
+    function handleBarcodeEnter(event) {
+      if (event.key === 'Enter') {
+        const q = event.target.value.toLowerCase().trim();
+        const found = inventoryData.find(i => i.sku.toLowerCase().includes(q) || i.name.toLowerCase().includes(q));
+        if (found) {
+          addProductToCart(found.id);
+          event.target.value = '';
+          showToast('✓ Added: ' + found.name);
+        } else {
+          showToast('Product not found: ' + q);
+        }
+      }
+    }
+
+    function sendWhatsApp(name, amt) {
+      showToast(`📲 WhatsApp Payment Reminder sent to ${name} for ₹ ${amt}`);
+    }
+
+    function customerPayUPI() {
+      if (confirm('Simulate UPI Payment of ₹ 48,500.00 to Mansoori Oil Depot via PhonePe / GPay?')) {
+        const c = customersData.find(cust => cust.id === 101);
+        if (c) c.balance = 0;
+        renderCustomersTable();
+        showToast('✓ Khata settled! Outstanding balance cleared to ₹0.00');
+      }
+    }
+
+    // Modal Handlers
+    function openLoginCredsModal() {
+      document.getElementById('credsModal').style.display = 'flex';
+    }
+
+    function closeLoginCredsModal() {
+      document.getElementById('credsModal').style.display = 'none';
+    }
+
+    function chooseCred(mode) {
+      chosenCred = mode;
+      const bAdmin = document.getElementById('boxAdmin');
+      const bCust = document.getElementById('boxCustomer');
+      const btn = document.getElementById('btnSwitchApply');
+
+      if (mode === 'admin') {
+        bAdmin.classList.add('selected');
+        bCust.classList.remove('selected');
+        btn.innerText = 'Switch to Owner Portal →';
+        btn.style.background = '#1b73e8';
+      } else {
+        bCust.classList.add('selected');
+        bAdmin.classList.remove('selected');
+        btn.innerText = 'Switch to Customer Portal →';
+        btn.style.background = '#10b981';
+      }
+    }
+
+    function applyPortalSwitch() {
+      closeLoginCredsModal();
+      switchPortalMode(chosenCred);
+    }
+
+    function openPrintModal(invNo, netAmt, cust, items) {
+      document.getElementById('recpNo').innerText = invNo;
+      document.getElementById('recpCustomer').innerText = cust;
+      document.getElementById('recpDate').innerText = new Date().toLocaleDateString();
+      document.getElementById('recpMode').innerText = selectedPayMode;
+
+      const itemsBox = document.getElementById('recpItemsList');
+      itemsBox.innerHTML = '';
+      const list = items || [
+        { name: 'Pure Mustard Oil 15L Tin', qty: 2, price: 1850.00, unit: 'Tin' }
+      ];
+
+      let sub = 0;
+      list.forEach(i => {
+        const line = i.price * i.qty;
+        sub += line;
+        itemsBox.innerHTML += `
+          <div style="display: flex; justify-content: space-between; margin: 3px 0;">
+            <span>${i.qty}x ${i.name}</span>
+            <span>₹ ${line.toFixed(2)}</span>
+          </div>
+        `;
+      });
+
+      const tax = sub * 0.05;
+      document.getElementById('recpSub').innerText = '₹ ' + sub.toFixed(2);
+      document.getElementById('recpCGST').innerText = '₹ ' + (tax / 2).toFixed(2);
+      document.getElementById('recpSGST').innerText = '₹ ' + (tax / 2).toFixed(2);
+      document.getElementById('recpNet').innerText = '₹ ' + parseFloat(netAmt).toFixed(2);
+
+      document.getElementById('printModal').style.display = 'flex';
+    }
+
+    function closePrintModal() {
+      document.getElementById('printModal').style.display = 'none';
+    }
+
+    function showToast(msg) {
+      const t = document.getElementById('toastMsg');
+      t.innerText = msg;
+      t.style.display = 'block';
+      setTimeout(() => { t.style.display = 'none'; }, 3000);
+    }
+  </script>
+</body>
+</html>
